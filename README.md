@@ -88,8 +88,5 @@ This repository contains the source code for a **Training Platform Web Applicati
 - Database migrations and seeders for streamlined development and testing.
 
 #### **License**:
-This project is licensed under [your preferred license, e.g., MIT License].
+- MIT License
 
----
-
-This version ensures all database commands, including specific seeders, are highlighted for completeness. 😊
