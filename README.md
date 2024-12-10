@@ -78,12 +78,6 @@ This repository contains the source code for a **Training Platform Web Applicati
    - **Frontend**:
      ```bash
      npm run dev
-     ```
-   - **Backend**:
-     ```bash
-     php artisan serve
-     ```
-
 ---
 
 #### **Features**:
