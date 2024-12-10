@@ -1,4 +1,4 @@
-Here’s a description you can use for your Git repository:
+Here's an updated description incorporating the database seeding commands:
 
 ---
 
@@ -10,8 +10,11 @@ This repository contains the source code for a **Training Platform Web Applicati
 - **CRUD operations** for Courses, Students, and Training Schedules.
 - **Opt-in and Opt-out functionality** for training schedules.
 - **Dynamic routing** with React Router.
+- **Database migrations and seeding** to manage schema and populate initial data.
 - **Frontend framework**: React.js with modern features and hooks.
 - **Backend framework**: Laravel for scalable API development.
+
+---
 
 #### **Technologies Used**:
 - **Frontend**: React.js (with Vite for build tooling)
@@ -21,15 +24,19 @@ This repository contains the source code for a **Training Platform Web Applicati
 - **Authentication**: Laravel Sanctum
 - **Routing**: React Router DOM
 - **Environment Configuration**: Managed via `.env` files
+- **Database**: MySQL with Laravel Migrations and Seeders
+
+---
 
 #### **Setup Instructions**:
-1. Clone the repository:
+
+1. **Clone the repository**:
    ```bash
    git clone <repository-url>
    cd TrainingPlatform
    ```
 
-2. Install dependencies:
+2. **Install dependencies**:
    - **Frontend**:
      ```bash
      npm install
@@ -39,7 +46,35 @@ This repository contains the source code for a **Training Platform Web Applicati
      composer install
      ```
 
-3. Run the development servers:
+3. **Set up the database**:
+   - Create a MySQL database (e.g., `training_platform`).
+   - Configure the database connection in the Laravel `.env` file:
+     ```
+     DB_CONNECTION=mysql
+     DB_HOST=127.0.0.1
+     DB_PORT=3306
+     DB_DATABASE=training_platform
+     DB_USERNAME=root
+     DB_PASSWORD=yourpassword
+     ```
+
+4. **Run database migrations**:
+   ```bash
+   php artisan migrate
+   ```
+
+5. **Seed the database**:
+   - To seed the entire database:
+     ```bash
+     php artisan db:seed
+     ```
+   - To seed specific classes (e.g., `UserSeeder` or `AdminSeeder`):
+     ```bash
+     php artisan db:seed --class=UserSeeder
+     php artisan db:seed --class=AdminSeeder
+     ```
+
+6. **Run the development servers**:
    - **Frontend**:
      ```bash
      npm run dev
@@ -49,17 +84,18 @@ This repository contains the source code for a **Training Platform Web Applicati
      php artisan serve
      ```
 
-4. Configure the `.env` file for both Laravel and Vite.
+---
 
 #### **Features**:
 - Efficient API integration with Laravel backend.
 - Clean and modular architecture.
 - Dynamic and reusable React components.
 - Seamless state management for application-wide consistency.
+- Database migrations and seeders for streamlined development and testing.
 
 #### **License**:
 This project is licensed under [your preferred license, e.g., MIT License].
 
 ---
 
-Feel free to customize this description based on your specific features and goals! 😊
+This version ensures all database commands, including specific seeders, are highlighted for completeness. 😊
