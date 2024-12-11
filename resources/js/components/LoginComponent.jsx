@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate,useLocation } from 'react-router-dom';
 import axios from 'axios';
+import { login } from './src/authSlice';
 
 const LoginComponent = () => {
   const location = useLocation();
@@ -8,34 +10,30 @@ const LoginComponent = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
   const [message, setMessage] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/login`, {
-            email,
-            password
-        }, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-    
-        const data = response.data;  
-        if (response.status === 200) {
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('role',data.role);
-            setMessage('Login successful!');
-            const decodedRole = atob(data.role);
-            navigate(`/${decodedRole}/dashboard`);
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/login`, {
+      email, password}, {headers: {'Content-Type': 'application/json'}});
+      console.log('response.status === 200 && response.data.success',response.status === 200 && response.data.success);
+        if (response.status === 200 && response.data.success) {
+          alert(response.data.message);
+          console.log('response.data.token',response.data.token);
+          console.log('response.data.user',response.data.user);
+            dispatch(login({
+                user: response.data.user,
+                token: response.data.token,
+            }));
+            navigate(`/${response.data.user.role}/dashboard`)
+        } else {
+          console.error('Login failed:', response.data.message);
         }
-    } catch (error) {
-        const message = error.response?.data?.message || 'Login failed. Please try again.';
-        setMessage(message);
-        console.error('Error:', error);
-    }
+      } catch (error) {
+          console.error('Error during login:', error.response?.data?.message || error.message);
+      }
   };
 
   return (

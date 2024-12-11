@@ -33,14 +33,24 @@ const CoursesComponent = () => {
         e.preventDefault();
         try {
             if (editingCourse) {
-                await updateCourse(editingCourse.id, formData);
-                setCourses(courses.map(course =>
-                    course.id === editingCourse.id ? { ...course, ...formData } : course
-                ));
-                setEditingCourse(null); 
+                const response  = await updateCourse(editingCourse.id, formData);
+                if (response.status === 200) {
+                    alert("Course data updated successfully");
+                    setCourses(courses.map(course =>
+                        course.id === editingCourse.id ? { ...course, ...formData } : course
+                    ));
+                    setEditingCourse(null); 
+                }else{
+                    throw new Error('Failed to update Course data');
+                }
             } else {
                 const response = await createCourse(formData);
-                setCourses([...courses, response.data]);
+                if (response.status === 201) {
+                    alert("Course data added successfully");
+                    setCourses([...courses, response.data]);
+                }else{
+                    throw new Error('Failed to add Course data');
+                }
             }
             setFormData({ name: '', description: '', duration: '', fee: '' }); 
         } catch (error) {
@@ -50,8 +60,13 @@ const CoursesComponent = () => {
 
     const handleDeleteCourse = async (id) => {
         try {
-            await deleteCourse(id);
-            setCourses(courses.filter(course => course.id !== id));
+            const response = await deleteCourse(id);
+            if (response.status === 200) {
+                alert("Course data added successfully");
+                setCourses(courses.filter(course => course.id !== id));
+            }else{
+                throw new Error('Failed to add Course data');
+            }
         } catch (error) {
             console.error('Error deleting course:', error);
         }
@@ -65,7 +80,7 @@ const CoursesComponent = () => {
     return (
         <>
             <NavBarComponent />
-            <div className="container mt-4">
+            <div className="container mt-4 table-responsive">
                 <h2>{editingCourse ? 'Edit Course' : 'Add New Course'}</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">

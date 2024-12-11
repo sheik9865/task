@@ -3,7 +3,7 @@ import axios from "axios";
 
 const OptInComponent = () => {
     const [scheduleId, setScheduleId] = useState("");
-
+    
     const handleOptIn = async () => {
         try {
             const token = localStorage.getItem("token");  // Get the auth token
@@ -12,6 +12,7 @@ const OptInComponent = () => {
                 { schedule_id: scheduleId },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
+            alert(response.data.message);
             console.log(response.data.message);
         } catch (error) {
             console.error("Opt-in Error:", error.response?.data.message);

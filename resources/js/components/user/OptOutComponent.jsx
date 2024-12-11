@@ -12,6 +12,7 @@ const OptOutComponent = () => {
                 { schedule_id: scheduleId },
                 { headers: { Authorization: `Bearer ${token}` } }
             );
+            alert(response.data.message);
             console.log(response.data.message);
         } catch (error) {
             console.error("Opt-out Error:", error.response?.data.message);

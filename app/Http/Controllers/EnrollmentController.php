@@ -19,8 +19,6 @@ class EnrollmentController extends Controller
 
         try {
             $studentId = Auth::user()->id;
-
-            // Check if already enrolled
             $alreadyEnrolled = Enrollment::where('student_id', $studentId)
                 ->where('schedule_id', $request->schedule_id)
                 ->first();

@@ -38,14 +38,24 @@ const StudentsComponent = () => {
         e.preventDefault();
         try {
             if (editingStudent) {
-                await updateStudent(editingStudent.id, formData);
-                setStudents(students.map(student =>
-                    student.id === editingStudent.id ? { ...student, ...formData } : student
-                ));
-                setEditingStudent(null);
+                const response = await updateStudent(editingStudent.id, formData);
+                if (response.status === 200) {
+                    alert("Student data updated successfully");
+                    setStudents(students.map(student =>
+                        student.id === editingStudent.id ? { ...student, ...formData } : student
+                    ));
+                    setEditingStudent(null);
+                }else{
+                    throw new Error('Failed to update student data');
+                }
             } else {
                 const response = await createStudent(formData);
-                setStudents([...students, response.data]);
+                if (response.status === 201) {
+                    alert("Student data added successfully");
+                    setStudents([...students, response.data]);
+                }else{
+                    throw new Error('Failed to create student data');
+                }
             }
 
             setFormData({ name: '', email: '', contact_number: '', address: '' });
@@ -56,8 +66,13 @@ const StudentsComponent = () => {
 
     const handleDelete = async (id) => {
         try {
-            await deleteStudent(id);
-            setStudents(students.filter(student => student.id !== id));
+            const response = await deleteStudent(id);
+            if (response.status === 200) {
+                alert("Student data deleted successfully");
+                setStudents(students.filter(student => student.id !== id));
+            } else {
+                throw new Error('Failed to create training schedule');
+            }
         } catch (error) {
             console.error('Failed to delete student:', error);
         }
@@ -76,7 +91,7 @@ const StudentsComponent = () => {
     return (
         <>
             <NavBarComponent/>
-            <div className="container mt-4">
+            <div className="container mt-4 table-responsive">
                 <h2>{editingStudent ? 'Edit Student' : 'Add New Student'}</h2>
 
                 <form onSubmit={handleSubmit} className="mt-4">

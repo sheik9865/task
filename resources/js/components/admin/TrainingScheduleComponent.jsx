@@ -40,14 +40,24 @@ const TrainingScheduleComponent = () => {
         e.preventDefault();
         try {
             if (editingSchedule) {
-                await updateTrainingSchedule(editingSchedule.id, formData);
-                setTrainingSchedules(trainingSchedules.map(schedule =>
-                    schedule.id === editingSchedule.id ? { ...schedule, ...formData } : schedule
-                ));
-                setEditingSchedule(null);
+                const response =await updateTrainingSchedule(editingSchedule.id, formData);
+                if (response.status === 200) {
+                    alert("Training Schedule updated successfully");
+                    setTrainingSchedules(trainingSchedules.map(schedule =>
+                        schedule.id === editingSchedule.id ? { ...schedule, ...formData } : schedule
+                    ));
+                    setEditingSchedule(null);
+                }else{
+                    throw new Error('Failed to update training schedule');
+                }
             } else {
                 const response = await createTrainingSchedule(formData);
-                setTrainingSchedules([...trainingSchedules, response.data]);
+                if (response.status === 201) {
+                    alert("Training Schedule added successfully");
+                    setTrainingSchedules([...trainingSchedules, response.data]);
+                } else {
+                    throw new Error('Failed to create training schedule');
+                }
             }
 
             setFormData({ course_id: '', trainer_name: '', start_date: '', end_date: '', time_slot: '' });
@@ -58,8 +68,13 @@ const TrainingScheduleComponent = () => {
 
     const handleDelete = async (id) => {
         try {
-            await deleteTrainingSchedule(id);
-            setTrainingSchedules(trainingSchedules.filter(schedule => schedule.id !== id));
+            const response = await  deleteTrainingSchedule(id);
+            if (response.status === 200) {
+                alert("Training Schedule deleted successfully");
+                setTrainingSchedules(trainingSchedules.filter(schedule => schedule.id !== id));
+            } else {
+                throw new Error('Failed to delete training schedule');
+            }
         } catch (error) {
             console.error('Failed to delete training schedule:', error);
         }
@@ -79,7 +94,7 @@ const TrainingScheduleComponent = () => {
     return (
         <>
             <NavBarComponent />
-            <div className="container mt-4">
+            <div className="container mt-4 table-responsive">
                 <h2>{editingSchedule ? 'Edit Training Schedule' : 'Add New Training Schedule'}</h2>
 
                 <form onSubmit={handleSubmit} className="mt-4">
